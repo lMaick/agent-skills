@@ -1,64 +1,114 @@
 ---
 name: linear-orchestrator
-description: >-
-  Protocolo de orquestração do MeuPlantão (Maick + Gravity + Linear + Braço Executor).
-  Define a divisão em 4 papéis, o fluxo padrão de tarefas para qualquer setor, o formato de prompt em 5 blocos
-  e a gestão de entregas via Linear até a aprovação final do dono.
+description: "Protocolo canônico de orquestração do MeuPlantão (Maick + Gravity + Linear + Orca). Define o modelo dos 4 papéis, o template rígido de 5 blocos, especificação de skills obrigatórias, template de comentário no Linear e economia de tokens no terminal."
 ---
 
-# 🧭 Time de Operação com IA (Maick + Gravity + Linear + Executor)
+# 🧭 Linear Orchestrator — Protocolo dos 4 Papéis (MeuPlantão)
 
-Este protocolo define a engenharia de operação e orquestração para todos os setores do MeuPlantão e ferramentas da organização.
+Este skill é a **fonte canônica de operação** para criação, estruturação, delegação e acompanhamento de tarefas entre o Dono, o Gerente (IA), o Mural (Linear) e os Executores (Orca/Workers).
 
 ---
 
-## 👥 Os 4 Papéis
+## 👥 1. Os 4 Papéis
 
-* **Você (Maick)** = **O Dono**. Define os pedidos, avalia as entregas e tem a palavra final de aprovação.
-* **Gravity** = **O Gerente / Orquestrador**. Entende o pedido, alinha a viabilidade, cria as tarefas no Linear com regras e skills, aciona o braço executor, audita a qualidade e apresenta a entrega.
-* **Linear** = **O Mural**. A única fonte de verdade. Nenhuma tarefa existe fora do mural. Guarda status, prioridades, links e histórico.
-* **O Braço Executor (Orca / Workers)** = **O Executor Isolado**. Cada tarefa ganha um ambiente isolado (worktree para código, worker para marketing/conteúdo) para produzir a entrega e abrir PR ou formatar o entregável.
-
----
-
-## 🔄 Fluxo Padrão
-
-1. **Pedido do Dono**: Maick traz o objetivo em linguagem natural.
-2. **Tarefa no Linear (O Mural)**: Gravity cria a issue no Linear via MCP com título claro, prioridade, setor e a skill obrigatória de `agent-skills`.
-3. **Disparar o Executor**:
-   * *Para Código / Dev*: disparar via Orca CLI em worktree isolada:
-     ```bash
-     orca worktree create --repo name:meuplantao --name nome-da-task --base-branch main --agent claude --prompt "..." --activate
-     ```
-   * *Para Marketing / Design / Outros*: despachar para o worker correspondente com a skill indicada.
-4. **Acompanhar**: verificar commit na worktree (`git log --oneline -3`), status do card no Linear ou logs de execução.
-5. **Revisão Técnica do Gerente (Gravity)**:
-   * Se código: auditar diff (`gh pr diff`), testes e lint verdes (`gh pr checks`).
-   * Se marketing/conteúdo: checar tom de voz, imagem e legenda no card.
-6. **Aprovação do Dono (Maick)**: Maick visualiza o PR ou o card no Linear na coluna `In Review` e dá o veredito.
-7. **Finalização**:
-   * Se código aprovado: merge via squash e branch deletada (`gh pr merge --squash --delete-branch`).
-   * Se post aprovado: agendamento disparado no Postiz (`node ops/marketing/postiz-client.mjs`).
-   * Fechar a tarefa no Linear (`Done`).
+- **Você (Maick) = O Dono:** Dá os pedidos em linguagem natural, aciona os workers no Orca e tem a palavra final de aprovação e merge dos PRs.
+- **Gravity = O Gerente / Orquestrador:** Alinha a viabilidade, estrutura as tarefas no Linear em `Todo` com a label `Orca Ready` seguindo estritamente o template de 5 blocos. Gravity **NUNCA** dispara workers nem executa tarefas de produção sozinho no chat.
+- **Linear = O Mural Canônico:** A fonte única da verdade. Nenhuma tarefa existe fora do mural. Guarda status, prioridades, links de PRs e histórico de entrega.
+- **Orca / Workers = O Braço Executor:** O Maick abre o Orca (**Tasks → Linear**), filtra por `Orca Ready`, seleciona a issue e cria o workspace para o worker executar o ciclo completo (código/arte + commit + push + PR + relatório no Linear).
 
 ---
 
-## 📝 O Prompt do Executor (Estrutura em 5 Blocos)
+## 🔄 2. Como Usar Este Skill (Fluxo Passo a Passo)
 
-Toda tarefa delegada ao executor deve conter exatamente estes 5 blocos:
+### Passo 1: Alinhamento do Pedido
+1. O Dono (Maick) envia o objetivo (ex: "preciso de um post sobre repasses atrasados" ou "quero suporte a dark mode").
+2. Gravity analisa a viabilidade técnica/clínica, propõe o escopo e confirma com o Dono.
 
-1. **TAREFA**: objetivo numerado, direto e específico (quais arquivos ou telas criar/modificar).
-2. **CONTEXTO**: o que já existe no projeto, bibliotecas usadas e padrão arquitetural.
-3. **FRONTEIRAS**: o que pertence a esta tarefa e o que NÃO deve ser tocado (evita colisão de arquivos e permite paralelismo).
-4. **REGRAS & SKILLS**: indicação da skill obrigatória em `.agents/skills-hub/skills/...` e regras do `AGENTS.md`.
-5. **ENTREGA**: formato esperado (branch própria + PR para `main` sem mergear, ou preenchimento no card do Linear).
+### Passo 2: Criação da Issue no Linear (via Gravity)
+Gravity usa o Linear MCP para criar a issue aplicando o seguinte checklist obrigatório:
+- **Projeto:** `MeuPlantao - Novo Fluxo` (`bd99b748-a38d-4355-bf1c-057ec9b1d398`).
+- **Status Inicial:** `Todo`.
+- **Labels:** `Orca Ready` + tag da área (`Dev`, `Marketing`, `Bug`, `Feature`, `Infra`).
+- **Prioridade:** 1 (Urgente), 2 (Alta) ou 3 (Média).
+- **Corpo da Issue:** Preenchido obrigatoriamente com o **Template Canônico dos 5 Blocos** abaixo.
+
+### Passo 3: Ativação do Worker (via Maick no Orca)
+1. Maick abre o app **Orca** ➔ vai em **Tasks** ➔ **Linear**.
+2. Filtra pelas issues com label **`Orca Ready`**.
+3. Clica na issue e cria o workspace para o worker iniciar.
+
+### Passo 4: Execução Isolada pelo Worker
+1. O worker lê a issue no Linear, identifica as **Skills Obrigatórias** e trabalha no branch correspondente.
+2. Executa a suíte de testes e linters locais (`npm test && npm run lint && npx tsc --noEmit && npm run build`).
+3. Executa o ciclo de Git: `git add .`, commit convencional, `git push` e `gh pr create` para `main`.
+4. Publica o **relatório completo estruturado como comentário no Linear**.
+5. **Economia de Tokens:** Responde no terminal do Orca apenas uma linha:
+   `Concluído: PR #X aberta e relatório postado no Linear.`
+
+### Passo 5: Revisão e Merge do Dono
+1. Maick visualiza o PR no GitHub ou o card no Linear na coluna `In Review`.
+2. Após aprovação do Dono, o PR é mergeado via squash (`gh pr merge --squash --delete-branch`).
+3. A issue no Linear é atualizada para `Done`.
+4. *Para tarefas de marketing:* o disparo/agendamento no Postiz é executado imediatamente após o merge.
 
 ---
 
-## 🏆 Regras de Ouro
+## 📝 3. Template Canônico do Briefing (5 Blocos Rígidos)
 
-* **Paralelismo por Dono de Arquivo**: Nunca dois executores ativos alterando os mesmos arquivos ao mesmo tempo.
-* **Deploy e Merge são do Dono**: Gravity e os executores nunca fazem merge em produção sem o OK de Maick.
-* **Zero Segredos**: Chaves, tokens e URLs privadas nunca aparecem em prompts, commits ou issues.
-* **Nada entra quebrado**: CI vermelho nunca mergeia; testes e typecheck são barreiras obrigatórias.
-* **Mural Atualizado**: O card no Linear sempre reflete o estado real da tarefa (`Todo` ➔ `In Progress` ➔ `In Review` ➔ `Done`).
+Toda issue criada para o Orca DEVE usar exatamente esta estrutura:
+
+```markdown
+---
+**Skills Obrigatórias:** `[ex: design-motion-principles, impeccable, frontend-developer]`
+**Modelo Recomendado:** `[Codex / Claude Sonnet / GPT-4o]` (High Effort)
+**Branch Base:** `main` ➔ `[feat|fix|docs]/[mai-XXX-slug]`
+---
+
+### 1. TAREFA & OBJETIVO
+[Descrição numerada, clara e precisa do que deve ser construído, corrigido ou gerado]
+
+### 2. CONTEXTO & PADRÕES DO REPO
+[Arquivos existentes, contratos, design system, paleta de cores ou regras clínicas envolvidas]
+
+### 3. FRONTEIRAS & ARQUIVOS PERMITIDOS
+- **Arquivos permitidos para alteração/criação:** `[lista explícita]`
+- **NÃO TOCAR:** `[arquivos fora do escopo para evitar regressões ou conflitos de merge]`
+
+### 4. REGRAS & CRITÉRIOS DE ACEITE
+- [Critério funcional/clínico 1]
+- [Critério de UX/Motion 2]
+- Testes 100% verdes (`npm test && npm run lint && npx tsc --noEmit && npm run build`).
+- Respeito estrito ao `AGENTS.md` (RLS Supabase, dados derivados, sem segredos em código).
+
+### 5. ENTREGA & TEMPLATE OBRIGATÓRIO (Git + Linear)
+1. Executar no terminal do worktree:
+   ```bash
+   git add .
+   git commit -m "[feat|fix|docs]([escopo]): [mensagem] (MAI-XXX)"
+   git push -u origin [branch]
+   gh pr create --base main --title "[feat|fix|docs]([escopo]): [mensagem] (MAI-XXX)" --body "Fixes #MAI-XXX"
+   ```
+2. **Comentário Obrigatório no Linear:** Publicar este template preenchido no card da issue:
+   ```markdown
+   🚀 **Entrega Concluída — MAI-XXX:**
+   - **Pull Request:** https://github.com/lMaick/meuplantao/pull/XXX
+   - **Branch:** [branch]
+   - **Commit:** [SHA]
+   - **O que foi feito:**
+     - [Item 1]
+     - [Item 2]
+   - **Status dos Testes:** Todos os testes passando (npm test / typecheck / lint verdes).
+   ```
+3. **Economia de Tokens no Terminal Orca:** Ao terminar, responda no terminal APENAS uma linha:
+   `Concluído: PR aberta e relatório postado no Linear.`
+```
+
+---
+
+## 🏆 4. Regras de Ouro Não Negociáveis
+
+1. **Paralelismo por Dono de Arquivo:** Nunca dois workers ativos alterando os mesmos arquivos simultaneamente.
+2. **Deploy e Merge são do Dono:** Gravity e workers nunca fazem merge em `main` sem o OK explícito de Maick.
+3. **Zero Segredos:** Chaves privadas, tokens e senhas pertencem unicamente a `.env.local` e secrets de CI.
+4. **Nada entra quebrado:** CI vermelho barra o merge.
+5. **Economia de Tokens no Orca:** Workers reportam detalhadamente apenas no Linear; o terminal recebe apenas a confirmação de uma linha.
