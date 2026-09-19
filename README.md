@@ -14,7 +14,7 @@ Em vez de manter dezenas de agentes com papéis fixos e personas duplicadas:
 
 ---
 
-## 📂 Catálogo Completo de Skills por Setor (42 Skills)
+## 📂 Catálogo Completo de Skills por Setor (43 Skills)
 
 ### 🎨 1. Frontend & UI/UX (6 Skills)
 | Skill | Descrição / Foco | Fonte / Referência |
@@ -39,9 +39,10 @@ Em vez de manter dezenas de agentes com papéis fixos e personas duplicadas:
 
 ---
 
-### 📣 3. Marketing & Growth (12 Skills)
+### 📣 3. Marketing & Growth (13 Skills)
 | Skill | Descrição / Foco | Fonte / Referência |
 | :--- | :--- | :--- |
+| **`marketing/linear-content-pipeline`** | Orquestração estrita de posts, aprovação 100% no Linear e Postiz. | Camada Própria do Hub |
 | **`marketing/copywriting`** | Copy de alta conversão para landing pages, anúncios, headlines e CTAs. | `coreyhaines31/marketingskills` |
 | **`marketing/copy-editing`** | Revisão, polimento e fortalecimento de textos já existentes. | `coreyhaines31/marketingskills` |
 | **`marketing/carousel-storytelling`** | Roteirização de carrosséis de 5 a 7 slides para Instagram e LinkedIn. | Camada Própria do Hub |
