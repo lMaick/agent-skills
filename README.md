@@ -39,10 +39,9 @@ Em vez de manter dezenas de agentes com papéis fixos e personas duplicadas:
 
 ---
 
-### 📣 3. Marketing & Growth (13 Skills)
+### 📣 3. Marketing & Growth (12 Skills)
 | Skill | Descrição / Foco | Fonte / Referência |
 | :--- | :--- | :--- |
-| **`marketing/linear-content-pipeline`** | Orquestração estrita de posts, aprovação 100% no Linear e Postiz. | Camada Própria do Hub |
 | **`marketing/copywriting`** | Copy de alta conversão para landing pages, anúncios, headlines e CTAs. | `coreyhaines31/marketingskills` |
 | **`marketing/copy-editing`** | Revisão, polimento e fortalecimento de textos já existentes. | `coreyhaines31/marketingskills` |
 | **`marketing/carousel-storytelling`** | Roteirização de carrosséis de 5 a 7 slides para Instagram e LinkedIn. | Camada Própria do Hub |
@@ -72,10 +71,11 @@ Em vez de manter dezenas de agentes com papéis fixos e personas duplicadas:
 
 ---
 
-### 📐 5. Produto & Engenharia de Requisitos (7 Skills)
+### 📐 5. Produto & Engenharia de Requisitos (8 Skills)
 | Skill | Descrição / Foco | Fonte / Referência |
 | :--- | :--- | :--- |
-| **`product/linear-issue-spec`** | Manual do Orquestrador: decomposição cirúrgica de issues e critérios Gherkin. | Camada Própria do Hub |
+| **`product/linear-orchestrator`** | Protocolo universal de orquestração de tarefas e aprovação no Linear. | Camada Própria do Hub |
+| **`product/linear-issue-spec`** | Manual de decomposição cirúrgica de issues e critérios Gherkin. | Camada Própria do Hub |
 | **`product/to-spec`** | Transforma ideias brutas ou vagas em especificações técnicas claras. | `mattpocock/skills` |
 | **`product/to-tickets`** | Decompõe especificações em tarefas atômicas e executáveis. | `mattpocock/skills` |
 | **`product/domain-modeling`** | Modelagem de entidades, invariantes, estados e regras de negócio. | `mattpocock/skills` |
