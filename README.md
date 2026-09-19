@@ -14,19 +14,24 @@ Eliminar a necessidade de manter dezenas de agentes com papéis fixos. Em vez di
 
 ---
 
-## 📂 Estrutura de Setores
+## 📂 Catálogo de Skills Ativas por Setor
 
 ```text
 agent-skills/
 ├── skills/
-│   ├── frontend/        # UI/UX, Design Systems, Acessibilidade, Motion e Frameworks
+│   ├── frontend/
 │   │   ├── impeccable/               # Polimento estético, tipografia, contraste e anti-slop
 │   │   └── design-motion-principles/ # Animações suaves, microinterações e springs
-│   ├── backend/         # Arquitetura de APIs, Banco de Dados, RLS e Performance
-│   ├── marketing/       # Copywriting, Storytelling, Calendário Editorial e Redes Sociais
-│   ├── qa/              # Testes E2E, TDD, Testes de Mutação e Auditoria de Qualidade
-│   ├── product/         # PRDs, Critérios de Aceite, Análise de Requisitos e User Stories
-│   └── devops/          # CI/CD, Docker, Observabilidade, Infra e Segurança
+│   ├── backend/
+│   │   ├── supabase-rls-guard/       # Auditoria de RLS, isolamento auth.uid() e RPCs atômicas
+│   │   └── nextjs-app-router/        # Server Components, DAL pattern e Server Actions com Zod
+│   ├── marketing/
+│   │   ├── high-converting-copy/     # Copywriting persuasivo (PAS, AIDA) e ganchos de conversão
+│   │   └── carousel-storytelling/    # Roteirização de carrosséis de 5-7 slides de alta retenção
+│   ├── qa/
+│   │   └── playwright-e2e/           # Testes ponta a ponta mobile-first (360px-430px) e POM
+│   └── product/
+│       └── linear-issue-spec/        # Especificação cirúrgica de issues com critérios Gherkin
 ```
 
 ---
@@ -49,8 +54,9 @@ Ao despachar uma tarefa no Linear, indique o caminho relativo da skill:
 
 ```markdown
 ## 🛠️ Skill Requerida
-* **Skill:** `.agents/skills/skills/frontend/impeccable/SKILL.md`
-* **Referência:** [agent-skills/frontend/impeccable](https://github.com/lMaick/agent-skills/tree/main/skills/frontend/impeccable)
+* **Skill Principal:** `skills/frontend/impeccable/SKILL.md`
+* **Skill Complementar:** `skills/frontend/design-motion-principles/SKILL.md`
+* **Repositório Central:** [lMaick/agent-skills](https://github.com/lMaick/agent-skills)
 ```
 
 ---
