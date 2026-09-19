@@ -1,0 +1,14 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp
+*.log
+.tmp/
+*.tmp
+
+# Dependencies (if any scripts use them)
+node_modules/
+.venv/
+__pycache__/
